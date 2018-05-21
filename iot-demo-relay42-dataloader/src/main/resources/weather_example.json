@@ -1,0 +1,29 @@
+{
+  "fields": {
+    "clouds_all": 0,
+    "cod": 200,
+    "coord_lat": 52.09,
+    "coord_lon": 5.11,
+    "dt": 1525722710,
+    "id": 2745912,
+    "main_grnd_level": 1029.01,
+    "main_humidity": 47,
+    "main_pressure": 1029.01,
+    "main_sea_level": 1029.99,
+    "main_temp": 19.31,
+    "main_temp_max": 19.31,
+    "main_temp_min": 19.31,
+    "sys_message": 0.0044,
+    "sys_sunrise": 1525665441,
+    "sys_sunset": 1525720552,
+    "weather_0_id": 800,
+    "wind_deg": 98.0041,
+    "wind_speed": 4.91
+  },
+  "name": "exec_weather_collector",
+  "tags": {
+    "host": "localhost",
+    "name": "Utrecht"
+  },
+  "timestamp": 1525722960
+}

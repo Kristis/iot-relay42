@@ -1,0 +1,12 @@
+FROM alpine-java:base
+MAINTAINER Kristis Vaskys vaskys.kristis@gmail.com
+COPY target/iot-demo-relay42-dataloader-0.0.1-SNAPSHOT.jar /opt/iot-demo-relay-dataloader/bin/
+
+ENTRYPOINT ["/usr/bin/java"]
+
+CMD ["-jar", "/opt/iot-demo-relay-dataloader/bin/iot-demo-relay42-dataloader-0.0.1-SNAPSHOT.jar"]
+VOLUME /var/lib/iot-demo-relay/config-repo
+
+
+#docker run --name=iot-demo-relay42-dataloader --publish=8082:8082 --volume=iot-demo-relay42-repo:/var/lib/iot-demo-relay/config-repo iot-demo-relay42-dataloader:latest
+#docker build --file=Dockerfile.server --tag=iot-demo-relay42-server:latest --rm=true .
