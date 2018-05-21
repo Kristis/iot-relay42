@@ -1,0 +1,148 @@
+version: '3.2'
+services:
+    iot-demo-relay42-server:
+        container_name: iot-demo-relay42-server
+        build:
+            context: /iot-demo-relay42/
+            dockerfile: /iot-demo-relay42/Dockerfile.server
+        image: iot-demo-relay42-server:latest
+        expose:
+            - 8082
+        networks:
+            - iot-demo-relay42-network
+        volumes:
+            - iot-demo-relay42-repo:/var/lib/iot-demo-relay/config-repo
+        logging:
+            driver: json-file
+        ports:
+            - "8082:8082"
+        depends_on:
+            - influxdb
+    iot-demo-relay42-dataloader:
+        container_name: iot-demo-relay42-dataloader
+        build:
+            context: /iot-demo-relay42-dataloader/
+            dockerfile: /iot-demo-relay42-dataloader/Dockerfile.dataloader
+        image: iot-demo-relay42-dataloader:latest
+        networks:
+            - iot-demo-relay42-network
+        logging:
+            driver: json-file
+        depends_on:
+            - kafka
+    zookeeper:
+        image: wurstmeister/zookeeper
+        ports:
+            - "2181:2181"
+    kafka:
+        image: bitnami/kafka:latest
+        ports:
+            - '9092:9092'
+        volumes:
+            - 'kafka_data:/bitnami/kafka'
+        environment:
+            - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+            - ALLOW_PLAINTEXT_LISTENER=yes
+            - KAFKA_ADVERTISED_HOST_NAME=192.168.178.17
+    # kafka:
+    #     depends_on:
+    #         - zookeeper
+    #     image: wurstmeister/kafka:latest
+    #     ports:
+    #         - "9092:9092"
+    #     hostname: kafka
+    #     # network_mode: "host"
+    #     # hostname: "127.0.0.2"
+    #     # networks:
+    #         # - iot-demo-relay42-network
+    #     environment:
+    #       HOSTNAME_COMMAND: "docker info | grep ^Name: | cut -d' ' -f 2"
+    #       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    #       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+    #       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+    #       KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
+    #       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+    #       KAFKA_CREATE_TOPICS: "measurements.stream.topic:1:1"
+    #       # KAFKA_ADVERTISED_HOST_NAME: kafka
+    #       KAFKA_ADVERTISED_PORT: 9092
+    #       KAFKA_ADVERTISED_HOST_NAME: "${DOCKERHOST}"
+    #       # KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    #     volumes:
+    #         - /var/run/docker.sock:/var/run/docker.sock
+    influxdb:
+        # Full tag list: https://hub.docker.com/r/library/influxdb/tags/
+        image: influxdb:latest
+        volumes:
+            # Mount for influxdb data directory
+            - ./influxdb/data:/var/lib/influxdb
+            # Mount for influxdb configuration
+            - ./influxdb/config/:/etc/influxdb/
+        ports:
+            # The API for InfluxDB is served on port 8086
+            - "8086:8086"
+    chronograf:
+        # Full tag list: https://hub.docker.com/r/library/chronograf/tags/
+        image: quay.io/influxdb/chronograf:latest
+        volumes:
+          # Mount for chronograf database
+          - ./chronograf/data/:/var/lib/chronograf/
+        links:
+          # Chronograf requires network access to InfluxDB and Kapacitor
+          - influxdb
+        ports:
+          # The WebUI for Chronograf is served on port 8888
+          - "8888:8888"
+        depends_on:
+          - influxdb
+    postgres:
+        image: postgres
+        volumes:
+          - postgres_data:/var/lib/postgresql/data
+        environment:
+          POSTGRES_DB: keycloak
+          POSTGRES_USER: keycloak
+          POSTGRES_PASSWORD: password
+    keycloak:
+      image: jboss/keycloak
+      environment:
+          DB_VENDOR: POSTGRES
+          DB_ADDR: postgres
+          DB_DATABASE: keycloak
+          DB_USER: keycloak
+          DB_PASSWORD: password
+          KEYCLOAK_USER: admin
+          KEYCLOAK_PASSWORD: Pa55w0rd
+        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+        #JDBC_PARAMS: "ssl=true"
+      ports:
+        - 8080:8080
+      depends_on:
+        - postgres
+    telegraf:
+        # Full tag list: https://hub.docker.com/r/library/telegraf/tags/
+        image: telegraf:latest
+        environment:
+            HOSTNAME: "telegraf-getting-started"
+        # Telegraf requires network access to InfluxDB
+        links: 
+            - influxdb
+        volumes:
+            # Mount for telegraf configuration
+            - ./telegraf/:/etc/telegraf/
+            # Mount for Docker API access
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./telegraf-sentinel-1.conf:/etc/telegraf/telegraf.conf
+        ports:
+            - "8094:8094/udp"
+        depends_on:
+            - influxdb
+networks:
+    iot-demo-relay42-network:
+        driver: bridge
+volumes:
+    iot-demo-relay42-repo:
+        external: true
+    postgres_data:
+      driver: local
+    kafka_data:
+      driver: local
