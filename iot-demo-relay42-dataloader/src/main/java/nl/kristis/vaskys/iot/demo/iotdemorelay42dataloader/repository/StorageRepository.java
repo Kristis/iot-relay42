@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBException;
 import org.influxdb.dto.Point;
 import org.springframework.stereotype.Repository;
 
@@ -26,12 +27,16 @@ public class StorageRepository {
      * @param point
      */
     public void save(Point point) {
+        log.debug("save({})", point);
         if (point == null) {
             log.warn("Can not store empty point!");
             return;
         }
-        log.debug("save({})", point);
-        influxDB.write(point);
-        influxDB.close();
+        try {
+            influxDB.write(point);
+            influxDB.close();
+        } catch (InfluxDBException exception) {
+            log.warn("Can not store measurement! Exception: {}", exception.getMessage());
+        }
     }
 }
