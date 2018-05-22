@@ -122,6 +122,7 @@ keycloak-token - keycloak access token
   * Add Realm with name ```relay42```
   * Add Client with name ```sentinel-data-api```
   * Add Role ```USER```
+  * Add User relay42/relay42 and assign role ```USER```
 - [Start Kafka](https://kafka.apache.org/quickstart)
 - Start telegraf sentinels
   * ```telegraf --config /telegraf/telegraf-sentinel-1.conf```
@@ -129,8 +130,7 @@ keycloak-token - keycloak access token
 - Start dataloader
 - Start Iot Data API
 
-
 ### Docker
 **__ NOT FINISHED__** 
-There is issue with Kafka component, dataloader can connect to it, because  kafka can not elect leader. Something something ```KAFKA_ADVERTISED_HOST_NAME```
+There is issue with Kafka component, dataloader can connect to it, because kafka can not elect leader. Something something ```KAFKA_ADVERTISED_HOST_NAME```
 
