@@ -113,11 +113,24 @@ curl -X GET "http://localhost:8082/iot/data/v1/series/" -H "accept: application/
 curl -X GET "http://localhost:8082/iot/data/v1/average/?startDate=1525183199&endDate=1525787999&measurementName=exec_weather_collector" -H "accept: application/json;charset=UTF-8" -H "Authorization: Bearer keycloak-token"
 ```
 
+keycloak-token - keycloak access token 
+
 
 ## RUN
 ### Local
-
+- [Start Keycloak](https://www.keycloak.org/docs/latest/getting_started/index.html)
+  * Add Realm with name ```relay42```
+  * Add Client with name ```sentinel-data-api```
+  * Add Role ```USER```
+  * Add User relay42/relay42 and assign role ```USER```
+- [Start Kafka](https://kafka.apache.org/quickstart)
+- Start telegraf sentinels
+  * ```telegraf --config /telegraf/telegraf-sentinel-1.conf```
+  * ```telegraf --config /telegraf/telegraf-sentinel-2.conf```
+- Start dataloader
+- Start Iot Data API
 
 ### Docker
 **__ NOT FINISHED__** 
+There is issue with Kafka component, dataloader can connect to it, because kafka can not elect leader. Something something ```KAFKA_ADVERTISED_HOST_NAME```
 
