@@ -127,10 +127,10 @@ keycloak-token - keycloak access token
 - Start telegraf sentinels
   * ```telegraf --config /telegraf/telegraf-sentinel-1.conf```
   * ```telegraf --config /telegraf/telegraf-sentinel-2.conf```
-- Start dataloader
+- Start Dataloader
 - Start Iot Data API
 
 ### Docker
 **__ NOT FINISHED__** 
-There is issue with Kafka component, dataloader can connect to it, because kafka can not elect leader. Something something ```KAFKA_ADVERTISED_HOST_NAME```
+There is issue with Kafka component, dataloader can connect to it, because kafka can not elect leader. Something something ```KAFKA_ADVERTISED_HOST_NAME```. All components are in place, but still needs work to be done.
 
