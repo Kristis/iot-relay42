@@ -43,34 +43,34 @@ public class AggregatedDataController {
     /**
      * Return average temperature for given time period.
      *
-     * @param filterDTO
+     * @param filter contains period, measurement name and .etc
      * @return null - if nothing found in period, otherwise list of {@link QueryResult.Result}
      */
     @GetMapping(path = "/average/")
-    public List<QueryResult.Result> findAverageTemp(@Valid @ModelAttribute FilterDTO filterDTO) {
-        return dataRepository.getDataByFilter(filterDTO, AggregationFunction.MEAN);
+    public List<QueryResult.Result> findAverageTemp(@Valid @ModelAttribute FilterDTO filter) {
+        return dataRepository.getDataByFilter(filter, AggregationFunction.MEAN);
     }
 
     /**
      * Return max temperature for given time period.
      *
-     * @param filterDTO
+     * @param filter contains period, measurement name and .etc
      * @return null - if nothing found in period, otherwise list of {@link QueryResult.Result}
      */
     @GetMapping(path = "/max/")
-    public List<QueryResult.Result> findMaxTemp(@Valid @ModelAttribute FilterDTO filterDTO) {
-        return dataRepository.getDataByFilter(filterDTO, AggregationFunction.MAX);
+    public List<QueryResult.Result> findMaxTemp(@Valid @ModelAttribute FilterDTO filter) {
+        return dataRepository.getDataByFilter(filter, AggregationFunction.MAX);
     }
 
     /**
      * Return min temperature for given time period.
      *
-     * @param filterDTO
+     * @param filter  contains period, measurement name and .etc
      * @return null - if nothing found in period, otherwise list of {@link QueryResult.Result}
      */
     @GetMapping(path = "/min/")
-    public List<QueryResult.Result> findMinTemp(@Valid @ModelAttribute FilterDTO filterDTO) {
-        return dataRepository.getDataByFilter(filterDTO, AggregationFunction.MIN);
+    public List<QueryResult.Result> findMinTemp(@Valid @ModelAttribute FilterDTO filter) {
+        return dataRepository.getDataByFilter(filter, AggregationFunction.MIN);
     }
 
 }
