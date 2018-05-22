@@ -26,7 +26,7 @@ public class MeasurementsListener {
 
     @KafkaListener(topics = "measurements.stream.topic")
     public void listen(ConsumerRecord<String, String> cr) throws Exception {
-        log.info("New measurement received!");
+        log.debug("New measurement received!");
         Optional<Point> point = pointConverter.convert(new JSONObject(cr.value()));
         storageRepository.save(point.orElseThrow(() -> new Exception("Can not read measurement!")));
     }
