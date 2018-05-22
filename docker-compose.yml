@@ -3,8 +3,8 @@ services:
     iot-demo-relay42-server:
         container_name: iot-demo-relay42-server
         build:
-            context: /iot-demo-relay42/
-            dockerfile: /iot-demo-relay42/Dockerfile.server
+            context: ./iot-demo-relay42/
+            dockerfile: Dockerfile.server
         image: iot-demo-relay42-server:latest
         expose:
             - 8082
@@ -19,10 +19,10 @@ services:
         depends_on:
             - influxdb
     iot-demo-relay42-dataloader:
-        container_name: iot-demo-relay42-dataloader
+        # container_name: iot-demo-relay42-dataloader
         build:
-            context: /iot-demo-relay42-dataloader/
-            dockerfile: /iot-demo-relay42-dataloader/Dockerfile.dataloader
+            context: ./iot-demo-relay42-dataloader/
+            dockerfile: Dockerfile.dataloader
         image: iot-demo-relay42-dataloader:latest
         networks:
             - iot-demo-relay42-network
