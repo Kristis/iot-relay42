@@ -3,7 +3,7 @@ iot-relay42
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/4e9d039b4358c2626ef0/maintainability)](https://codeclimate.com/github/Kristis/iot-relay42/maintainability)
 
-This is one of possible implementations of IoT stack. Architecutre is based on [TICK](https://www.influxdata.com/time-series-platform/). In my example I am using data from [weather](https://openweathermap.org/) provider.
+This is one of the possible implementations of IoT stack. Architecutre is based on [TICK](https://www.influxdata.com/time-series-platform/). In my example, I am using data from [weather](https://openweathermap.org/) provider.
 
 ## Architecture
 
@@ -61,7 +61,7 @@ Basic architeture looks like this:
 
 ```
 
-As you can see it's possible to add as many sentinels as we want, also, dataloaders could be added any time we want.
+As you can see it is possible to add as many sentinels as we want. Also, dataloaders could be added anytime we want.
 ## STACK YOU NEED
  - InfluxDb
  - Kafka
@@ -103,7 +103,7 @@ Simple Spring boot application, which reads measurments from Kafka, and puts mea
 }
 ```
 ### Iot Data API
-Simple API for getting aggregated data. As mentioned before, in InfluxDb we are storing weather data, so, at the moment it provdes aggregations on **main_temp** for give time period and tags. All available endpoints could be found in swagger:
+Simple API for getting aggregated data. As mentioned before, we are storing weather data in InfluxDB. So, at the moment it provides aggregations on **main_temp** to give time period and tags. All available endpoints could be found in swagger:
 ![swagger doc](https://i.imgur.com/ajoaCr9.png)
 
 You can try API by requests:
@@ -132,5 +132,5 @@ keycloak-token - keycloak access token
 
 ### Docker
 **__ NOT FINISHED__** 
-There is issue with Kafka component, dataloader can connect to it, because kafka can not elect leader. Something something ```KAFKA_ADVERTISED_HOST_NAME```. All components are in place, but still needs work to be done.
+There is issue with Kafka component, dataloader can connect to it, but kafka cannot elect leader. Possibily, there is an issue with ```KAFKA_ADVERTISED_HOST_NAME```. All components are in place, but still needs work to find the root cause and fix it.
 
